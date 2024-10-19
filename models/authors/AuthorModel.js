@@ -8,14 +8,14 @@ const AuthorModel = sequelize.define('Author', {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            len: [2, 50],
+            len: [2, 255],
         },
     },
     lastName: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            len: [2, 50],
+            len: [2, 255],
         },
     },
     isActive: {
