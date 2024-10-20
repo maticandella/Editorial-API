@@ -1,9 +1,10 @@
 import express from 'express';
-import { create } from '../controllers/authorController.js';
+import { create, getById, getAuthors } from '../controllers/authorController.js';
 
 const router = express.Router();
-const name = 'author';
 
+router.get('/:id', getById);
+router.get('/', getAuthors);
 router.post('/', create);
 
 export default router;

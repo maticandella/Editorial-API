@@ -7,6 +7,20 @@ export default class GenericRepository {
         return await this.model.findAll();
     }
 
+    async getAllPaginated({ limit, offset, order }) {
+        const [authors, totalAuthors] = await Promise.all([
+            this.model.findAll({
+                limit,
+                offset,
+                order: order || [
+                    ['id', 'ASC']
+                ],
+            }),
+            this.model.count(),
+        ]);
+        return { totalAuthors, authors };
+    }
+
     async getById(id) {
         return await this.model.findByPk(id);
     }

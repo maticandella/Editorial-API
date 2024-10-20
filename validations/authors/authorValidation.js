@@ -8,17 +8,20 @@ export const authorSchema = Joi.object({
     lastName: Joi.string().required().messages({
         'any.required': 'El apellido es requerido.'
     }),
-    nacionalityId: Joi.string().required().messages({
-        'any.required': 'La nacionalidad es requerida.'
+    nacionalityId: Joi.number().integer().required().messages({
+        'any.required': 'La nacionalidad es requerida.',
+        'number.base': 'La nacionalidad debe ser un número.',
+        'number.integer': 'La nacionalidad debe ser un número entero.'
     }),
-    // photo: Joi.pattern(/\.(jpg|jpeg|png)$/i).base64().messages({
-    //     'string.pattern.base': 'La foto debe tener una extensión válida (.jpg, .jpeg, .png).',
-    //     'string.base64': 'La foto debe estar en formato base64.'
-    // })
+    photo: Joi.string().optional(), //pattern(/\.(jpg|jpeg|png)$/i).messages({
+    // 'string.pattern.base': 'La foto debe tener una extensión válida (.jpg, .jpeg, .png).',
+    // }),
+    isActive: Joi.boolean().optional(),
+    note: Joi.string().optional()
 });
 
 export const validateAuthor = ({ author }) => {
-    const { error } = authorSchema.validate(author, { abortEarly: false });;
+    const { error } = authorSchema.validate(author, { abortEarly: false });
 
     if (error) throw new ValidationError(error.details.map(detail => detail.message).join(', '));
 };
