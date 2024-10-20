@@ -2,8 +2,6 @@ import { ValidationError, ConnectionError } from './baseErrors.js';
 import { errorResponse } from '../helpers/responseHelper.js';
 
 export const handleError = (error, res) => {
-    // console.error('Captured Error:', error.message);
-
     if (error instanceof ValidationError) {
         return errorResponse(res, [error.message], 400);
     } else if (error instanceof ConnectionError) {

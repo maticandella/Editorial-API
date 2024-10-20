@@ -8,8 +8,6 @@ import userRoutes from './routes/userRoutes.js';
 import { sequelize } from './config/database.js';
 import cookieParser from 'cookie-parser';
 import { jsonWebTokenVerify } from './middlewares/jsonWebTokenVerify.js';
-import NacionalityModel from './models/Nacionalities/NacionalityModel.js';
-import AuthorModel from './models/authors/AuthorModel.js';
 dotenv.config();
 
 const app = express()
@@ -44,9 +42,6 @@ const initApp = async() => {
 
         await sequelize.sync({ force: false }) // force: true si quiero forzar recrear las tablas
         console.log('Database synchronized.')
-
-        // await NacionalityModel.sync({ force: true });
-        // await AuthorModel.sync({ force: true });
 
         // Iniciar el servidor
         app.listen(port, () => {
