@@ -9,8 +9,10 @@ import userRoutes from './routes/admin/userRoutes.js';
 import { sequelize } from './config/database.js';
 import cookieParser from 'cookie-parser';
 import { jsonWebTokenVerify } from './middlewares/jsonWebTokenVerify.js';
+import defineAssociations from './models/associations.js';
 dotenv.config();
 
+defineAssociations();
 const app = express()
 const port = process.env.PORT || 3000
 const clientPort = process.env.CLIENT_PORT || 4200
