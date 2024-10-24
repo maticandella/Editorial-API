@@ -15,19 +15,11 @@ export default class GenericRepository {
         return await this.model.create(data);
     }
 
-    async update(id, data) {
-        const entity = await this.model.findByPk(id);
-        if (!entity) {
-            throw new Error('Not found');
-        }
+    async update(entity, data) {
         return await entity.update(data);
     }
 
-    async remove(id) {
-        const entity = await this.model.findByPk(id);
-        if (!entity) {
-            throw new Error('Not found');
-        }
+    async remove(entity) {
         return await entity.destroy();
     }
 }

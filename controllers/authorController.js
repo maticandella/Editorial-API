@@ -38,8 +38,19 @@ const create = async(req, res) => {
     }
 };
 
+const update = async(req, res) => {
+    try {
+        const response = await authorService.updateAuthor(req.params.id, req.body);
+        return successResponse(res, 'Autor modificado con éxito.', response, 204);
+    } catch (e) {
+        console.error(e)
+        handleError(e, res)
+    }
+};
+
 export {
     getById,
     getAuthors,
-    create
+    create,
+    update
 };

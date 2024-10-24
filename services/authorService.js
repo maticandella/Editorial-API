@@ -2,6 +2,7 @@ import NationalityModel from '../models/nacionalities/NacionalityModel.js';
 import AuthorRepository from '../repositories/authors/authorRepository.js';
 import AuthorModel from '../models/authors/AuthorModel.js';
 import { validateAuthor } from '../validations/authors/authorValidation.js';
+import { OperationEnum } from '../shared/enums/OperationEnum.js';
 
 const repository = new AuthorRepository(AuthorModel);
 
@@ -27,10 +28,18 @@ const getAll = async({ page = 1, limit = 10, order }) => {
 const createAuthor = async(data) => {
     data.name = normalizeName(data.name);
     data.lastName = normalizeName(data.lastName);
-    validateAuthor({ author: data });
+    validateAuthor({ author: data }, null, OperationEnum.POST);
     return await repository.create(data);
+};
+
+const updateAuthor = async(id, data) => {
+    const entityInDb = await repository.getById(id);
+    data.name = normalizeName(data.name);
+    data.lastName = normalizeName(data.lastName);
+    validateAuthor({ author: data }, entityInDb, OperationEnum.PUT);
+    return await repository.update(entityInDb, data);
 };
 
 const normalizeName = (name) => name.trim().toUpperCase();
 
-export { getById, getAll, createAuthor };
+export { getById, getAll, createAuthor, updateAuthor };

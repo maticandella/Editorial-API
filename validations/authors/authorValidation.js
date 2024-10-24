@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { ValidationError } from "../baseErrors.js";
+import { OperationEnum } from '../../shared/enums/OperationEnum.js';
 
 export const authorSchema = Joi.object({
     name: Joi.string().required().messages({
@@ -20,7 +21,9 @@ export const authorSchema = Joi.object({
     note: Joi.string().optional()
 });
 
-export const validateAuthor = ({ author }) => {
+export const validateAuthor = ({ author }, entityInDb, operation) => {
+    if (operation !== OperationEnum.POST && entityInDb == null && entityInDb == undefined) throw new ValidationError('El autor no fue encontrado.');
+
     const { error } = authorSchema.validate(author, { abortEarly: false });
 
     if (error) throw new ValidationError(error.details.map(detail => detail.message).join(', '));
