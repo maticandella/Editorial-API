@@ -1,5 +1,6 @@
 import NationalityModel from '../models/nacionalities/NacionalityModel.js';
 import AuthorSocialMediaModel from '../models/authors/AuthorSocialMediaModel.js';
+import SocialMediaTypeModel from '../models/socialMediaTypes/SocialMediaTypeModel.js';
 import AuthorRepository from '../repositories/authors/authorRepository.js';
 import AuthorModel from '../models/authors/AuthorModel.js';
 import { validateAuthor } from '../validations/authors/authorValidation.js';
@@ -35,7 +36,12 @@ const getAll = async({ page = 1, limit = 10, order }) => {
             model: AuthorSocialMediaModel,
             as: 'socialMediaAccounts',
             attributes: ['url', 'socialMediaTypeId'],
-        }
+            include: [{
+                model: SocialMediaTypeModel,
+                as: 'socialMediaType',
+                attributes: ['icon'],
+            }, ],
+        },
     ];
 
     const { totalAuthors, authors } = await repository.getAllPaginated({ limit, offset, order, include });

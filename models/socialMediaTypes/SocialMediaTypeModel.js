@@ -8,6 +8,10 @@ const SocialMediaTypeModel = sequelize.define('SocialMediaType', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    icon: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 }, {
     tableName: 'SocialMediaType',
     timestamps: false,

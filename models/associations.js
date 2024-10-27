@@ -24,7 +24,6 @@ export default function defineAssociations() {
         as: 'author',
     });
 
-    // Relación entre SocialMediaType y AuthorSocialMedia
     SocialMediaTypeModel.hasMany(AuthorSocialMediaModel, {
         foreignKey: 'socialMediaTypeId',
         as: 'socialMediaEntries',
