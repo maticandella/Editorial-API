@@ -7,8 +7,11 @@ export default class GenericRepository {
         return await this.model.findAll();
     }
 
-    async getById(id) {
-        return await this.model.findByPk(id);
+    async getById(id, options = {}) {
+        return await this.model.findOne({
+            where: { id },
+            ...options,
+        });
     }
 
     async create(data) {
