@@ -39,7 +39,7 @@ const getAll = async({ page = 1, limit = 10, order }) => {
             include: [{
                 model: SocialMediaTypeModel,
                 as: 'socialMediaType',
-                attributes: ['icon'],
+                attributes: ['icon', 'name'],
             }, ],
         },
     ];
