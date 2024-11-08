@@ -18,6 +18,13 @@ const getById = async(id) => {
             model: AuthorSocialMediaModel,
             as: 'socialMediaAccounts',
             attributes: ['url', 'socialMediaTypeId'],
+            include: [
+                {
+                    model: SocialMediaTypeModel,
+                    as: 'socialMediaType',
+                    attributes: ['icon', 'name'],
+                }
+            ]
         }
     ];
     return await repository.getById(id, { include });

@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRoutes from './routes/admin/authRoutes.js';
 import authorRoutes from './routes/authorRoutes.js';
 import authorAdminRoutes from './routes/admin/authorAdminRoutes.js';
+import bookRoutes from './routes/bookRoutes.js';
 import userRoutes from './routes/admin/userRoutes.js';
 import { sequelize } from './config/database.js';
 import cookieParser from 'cookie-parser';
@@ -30,6 +31,7 @@ app.use(cookieParser())
 // Rutas sin autenticación (Sitio público)
 app.use('/', authRoutes)
 app.use(`/authors`, authorRoutes)
+app.use(`/books`, bookRoutes)
 
 //Middleware para el token
 app.use(jsonWebTokenVerify)

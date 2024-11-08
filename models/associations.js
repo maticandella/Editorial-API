@@ -1,7 +1,11 @@
+import GenreModel from './genres/GenreModel.js';
 import AuthorModel from './authors/AuthorModel.js';
 import NationalityModel from './nacionalities/NacionalityModel.js';
 import SocialMediaTypeModel from './socialMediaTypes/SocialMediaTypeModel.js';
 import AuthorSocialMediaModel from './authors/AuthorSocialMediaModel.js';
+
+import EditionModel from './editions/EditionModel.js';
+import BookModel from './books/BookModel.js';
 
 export default function defineAssociations() {
     NationalityModel.hasMany(AuthorModel, {
@@ -32,5 +36,32 @@ export default function defineAssociations() {
     AuthorSocialMediaModel.belongsTo(SocialMediaTypeModel, {
         foreignKey: 'socialMediaTypeId',
         as: 'socialMediaType',
+    });
+
+    BookModel.belongsTo(AuthorModel, { 
+        foreignKey: 'authorId', 
+        as: 'author' 
+    });
+    AuthorModel.hasMany(BookModel, { 
+        foreignKey: 'authorId', 
+        as: 'books' 
+    });
+
+    BookModel.belongsTo(GenreModel, { 
+        foreignKey: 'genreId', 
+        as: 'genre' 
+    });
+    GenreModel.hasMany(BookModel, { 
+        foreignKey: 'genreId', 
+        as: 'books' 
+    });
+
+    BookModel.belongsTo(EditionModel, { 
+        foreignKey: 'editionId', 
+        as: 'edition' 
+    });
+    EditionModel.hasMany(BookModel, { 
+        foreignKey: 'editionId', 
+        as: 'books' 
     });
 }
