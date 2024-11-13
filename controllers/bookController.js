@@ -16,7 +16,7 @@ const getById = async(req, res) => {
 const getByAuthorId = async(req, res) => {
     try {
         const books = await bookService.getByAuthorId(req.params.id);
-        if (!books) return errorResponse(res, 'Libros no encontrados.', 404);
+        if (!books || books.length == 0) return errorResponse(res, 'Libros no encontrados.', 404);
         return successResponse(res, 'Libros obtenidos con éxito', { books }, 200);
     } catch (e) {
         console.error(e)

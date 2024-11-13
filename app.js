@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { swaggerSpecs, swaggerUi } from './config/swaggerConfig.js';
 import authRoutes from './routes/admin/authRoutes.js';
 import authorRoutes from './routes/authorRoutes.js';
 import authorAdminRoutes from './routes/admin/authorAdminRoutes.js';
@@ -17,8 +18,10 @@ defineAssociations();
 const app = express()
 const port = process.env.PORT || 3000
 const clientPort = process.env.CLIENT_PORT || 4200
+
 app.use(cors({
-    origin: `http://localhost:${clientPort}`,
+    origin: '*',
+    // origin: `http://localhost:${clientPort}`,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     // allowedHeaders: ['Content-Type', 'Authorization']
@@ -27,11 +30,13 @@ app.use(cors({
 app.disable('x-powered-by')
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Rutas sin autenticación (Sitio público)
-app.use('/', authRoutes)
-app.use(`/authors`, authorRoutes)
-app.use(`/books`, bookRoutes)
+const api = 'api'
+app.use(`/${api}/`, authRoutes)
+app.use(`/${api}/authors`, authorRoutes)
+app.use(`/${api}/books`, bookRoutes)
 
 //Middleware para el token
 app.use(jsonWebTokenVerify)
@@ -52,7 +57,8 @@ const initApp = async() => {
 
         // Iniciar el servidor
         app.listen(port, () => {
-            console.log(`Server is running on http://localhost:${port}`)
+            console.log(`Servidor corriendo en http://localhost:${port}`);
+            console.log(`Documentación de la API en http://localhost:${port}/api-docs`);
         })
     } catch (error) {
         console.error(`Error initializing app:${error.message}`)
