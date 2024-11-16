@@ -64,13 +64,16 @@ const search = async ({ page = 1, limit = 10, name }) => {
     const offset = (page - 1) * limit;
     const filters = {};
     
-    //Normalizo el name, para realizar búsquedas SIEMPRE en mayusculas (tal como están los registros en BBDD)
-    const nameSearch = normalizeName(name || '');
+    const nameSearch = name || '';
     if (nameSearch) {
-        filters[Op.or] = [
-            { name: { [Op.like]: `%${nameSearch}%` } },
-            { lastName: { [Op.like]: `%${nameSearch}%` } }
-        ];
+        const words = nameSearch.split(' ');
+        
+        filters[Op.and] = words.map(word => ({
+            [Op.or]: [
+                { name: { [Op.iLike]: `%${word}%` } },
+                { lastName: { [Op.iLike]: `%${word}%` } }
+            ]
+        }));
     }
     const { totalAuthors, authors } = await repository.search({filters, limit, offset });
     const totalPages = Math.ceil(totalAuthors / limit);
