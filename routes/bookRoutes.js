@@ -1,5 +1,5 @@
 import express from 'express';
-import { getById, getByAuthorId } from '../controllers/bookController.js';
+import { getById, getByAuthorId, getBooks } from '../controllers/bookController.js';
 
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Books
- *   description: Endpoints de gestión de Libros
+ *   description: Endpoints de Libros
  */
 
 /**
@@ -108,6 +108,81 @@ router.get('/:id', getById);
  */
 router.get('/author/:id', getByAuthorId);
 
-// router.get('/', getBooks);
+/**
+ * @swagger
+ * /api/books:
+ *   get:
+ *     summary: Obtener una lista de libros
+ *     tags: [Books]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Número máximo de libros a devolver
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Número de libros a omitir en los resultados
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Campo por el cual ordenar los libros
+ *       - in: query
+ *         name: include
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         required: false
+ *         description: Relaciones a incluir en los resultados (ej., "author", "genre")
+ *     responses:
+ *       200:
+ *         description: Lista de libros
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalBooks:
+ *                   type: integer
+ *                   description: Número total de libros disponibles
+ *                 books:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       title:
+ *                         type: string
+ *                       authorId:
+ *                         type: integer
+ *                       genreId:
+ *                         type: integer
+ *                       editionId:
+ *                         type: integer
+ *                       photo:
+ *                         type: string
+ *                       isbn:
+ *                         type: string
+ *                       pagesNumber:
+ *                         type: integer
+ *                       year:
+ *                         type: integer
+ *                       review:
+ *                         type: string
+ *                       size:
+ *                         type: integer
+ *                       price:
+ *                         type: number
+ *                         format: float
+ *       500:
+ *         description: Error interno del servidor
+ */
+router.get('/', getBooks);
 
 export default router;

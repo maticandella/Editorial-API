@@ -53,9 +53,9 @@ const getAll = async({ page = 1, limit = 10, order }) => {
     limit = parseInt(limit, 10);
     const offset = (page - 1) * limit;
 
-    const { totalAuthors, authors } = await repository.getAllPaginated({ limit, offset, order, include });
-    const totalPages = Math.ceil(totalAuthors / limit);
-    return { authors, totalPages, totalAuthors };
+    const { totalItems, items } = await repository.getAllPaginated({ limit, offset, order, include });
+    const totalPages = Math.ceil(totalItems / limit);
+    return { items, totalPages, totalItems };
 };
 
 const search = async ({ page = 1, limit = 10, name }) => {
@@ -75,9 +75,9 @@ const search = async ({ page = 1, limit = 10, name }) => {
             ]
         }));
     }
-    const { totalAuthors, authors } = await repository.search({filters, limit, offset });
-    const totalPages = Math.ceil(totalAuthors / limit);
-    return { authors, totalPages, totalAuthors };
+    const { totalItems, items } = await repository.search({filters, limit, offset });
+    const totalPages = Math.ceil(totalItems / limit);
+    return { items, totalPages, totalItems };
 }
 
 const createAuthor = async(data) => {

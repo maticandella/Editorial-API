@@ -19,9 +19,9 @@ const getAuthors = async(req, res) => {
         if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1)
             return errorResponse(res, 'Los parámetros de paginación deben ser números positivos.', 400);
 
-        const { authors, totalPages, totalAuthors } = await authorService.getAll({ page, limit, order });
+        const { items, totalPages, totalItems } = await authorService.getAll({ page, limit, order });
 
-        return successResponse(res, 'Autores obtenidos con éxito.', { authors, totalPages, totalAuthors }, 200);
+        return successResponse(res, 'Autores obtenidos con éxito.', { items, totalPages, totalItems }, 200);
     } catch (e) {
         console.error(e);
         handleError(e, res);
@@ -34,8 +34,8 @@ const search = async(req, res) => {
         if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1)
             return errorResponse(res, 'Los parámetros de paginación deben ser números positivos.', 400);
         
-        const { authors, totalPages, totalAuthors } = await authorService.search({ page, limit, name });
-        return successResponse(res, 'Autores obtenidos con éxito.', { authors, totalPages, totalAuthors }, 200);
+        const { items, totalPages, totalItems } = await authorService.search({ page, limit, name });
+        return successResponse(res, 'Autores obtenidos con éxito.', { items, totalPages, totalItems }, 200);
     } catch (e) {
         console.error(e);
         handleError(e, res);

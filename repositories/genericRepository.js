@@ -14,6 +14,33 @@ export default class GenericRepository {
         });
     }
 
+    async getAllPaginated({ limit, offset, order, include = [] }) {
+        const [items, totalItems] = await Promise.all([
+            this.model.findAll({
+                limit,
+                offset,
+                order: order || [['id', 'ASC']],
+                include,
+            }),
+            this.model.count(),
+        ]);
+        return { totalItems, items };
+    }
+
+    async search({ filters = {}, limit = 10, offset = 0, include = [] }) {
+        const [items, totalItems] = await Promise.all([
+            this.model.findAll({
+                where: filters,
+                limit,
+                offset,
+                order: [['name', 'ASC']],
+                include,
+            }),
+            this.model.count({ where: filters }),
+        ]);
+        return { totalItems, items };
+    }
+
     async create(data) {
         return await this.model.create(data);
     }

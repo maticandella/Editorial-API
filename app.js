@@ -7,6 +7,7 @@ import authRoutes from './routes/admin/authRoutes.js';
 import authorRoutes from './routes/authorRoutes.js';
 import authorAdminRoutes from './routes/admin/authorAdminRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
+import genreRoutes from './routes/genreRoutes.js';
 import userRoutes from './routes/admin/userRoutes.js';
 import { sequelize } from './config/database.js';
 import cookieParser from 'cookie-parser';
@@ -37,6 +38,7 @@ const api = 'api'
 app.use(`/${api}/`, authRoutes)
 app.use(`/${api}/authors`, authorRoutes)
 app.use(`/${api}/books`, bookRoutes)
+app.use(`/${api}/genres`, genreRoutes)
 
 //Middleware para el token
 app.use(jsonWebTokenVerify)
