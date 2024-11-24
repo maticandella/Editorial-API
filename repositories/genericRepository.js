@@ -27,13 +27,13 @@ export default class GenericRepository {
         return { totalItems, items };
     }
 
-    async search({ filters = {}, limit = 10, offset = 0, include = [] }) {
+    async search({ filters = {}, limit = 10, offset = 0, include = [], order = [['name', 'ASC']] }) {
         const [items, totalItems] = await Promise.all([
             this.model.findAll({
                 where: filters,
                 limit,
                 offset,
-                order: [['name', 'ASC']],
+                order,
                 include,
             }),
             this.model.count({ where: filters }),

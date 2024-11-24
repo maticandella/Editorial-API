@@ -14,7 +14,7 @@ const router = express.Router();
  * @swagger
  * /api/authors/search:
  *   get:
- *     summary: Buscar autores por nombre con paginación
+ *     summary: Buscar autores por nombre con paginación y filtro por inicial del apellido
  *     tags: [Authors]
  *     parameters:
  *       - in: query
@@ -23,6 +23,13 @@ const router = express.Router();
  *           type: string
  *         required: false
  *         description: Nombre o apellido del autor para búsqueda parcial
+ *       - in: query
+ *         name: initial
+ *         schema:
+ *           type: string
+ *           maxLength: 1
+ *         required: false
+ *         description: Primera letra del apellido para filtrar
  *       - in: query
  *         name: page
  *         schema:

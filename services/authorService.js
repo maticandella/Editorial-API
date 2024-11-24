@@ -48,17 +48,18 @@ const getById = async(id) => {
     return await repository.getById(id, { include });
 };
 
-const getAll = async({ page = 1, limit = 10, order }) => {
+const getAll = async({ page = 1, limit = 10 }) => {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     const offset = (page - 1) * limit;
+    const order = [['lastName', 'ASC']]
 
     const { totalItems, items } = await repository.getAllPaginated({ limit, offset, order, include });
     const totalPages = Math.ceil(totalItems / limit);
     return { items, totalPages, totalItems };
 };
 
-const search = async ({ page = 1, limit = 10, name }) => {
+const search = async ({ page = 1, limit = 10, name, initial }) => {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     const offset = (page - 1) * limit;
@@ -75,7 +76,21 @@ const search = async ({ page = 1, limit = 10, name }) => {
             ]
         }));
     }
-    const { totalItems, items } = await repository.search({filters, limit, offset });
+
+    // Filtrar por inicial del apellido
+    if (initial) {
+        // Me aseguro de que initial es una letra válida
+        const initialFilter = initial.trim()[0]?.toLowerCase(); 
+        if (initialFilter) {
+            filters[Op.and] = [
+                ...(filters[Op.and] || []),
+                { lastName: { [Op.iLike]: `${initialFilter}%` } }
+            ];
+        }
+    }
+
+    const order = [['lastName', 'ASC']]
+    const { totalItems, items } = await repository.search({filters, limit, offset, order });
     const totalPages = Math.ceil(totalItems / limit);
     return { items, totalPages, totalItems };
 }

@@ -47,6 +47,11 @@ const BookModel = sequelize.define('Book', {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    popularityScore: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
     price: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
