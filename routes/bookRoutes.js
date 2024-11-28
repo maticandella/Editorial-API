@@ -1,5 +1,5 @@
 import express from 'express';
-import { getById, getByAuthorId, getBooks } from '../controllers/bookController.js';
+import { getById, getByAuthorId, getBooks, search } from '../controllers/bookController.js';
 
 const router = express.Router();
 
@@ -9,6 +9,80 @@ const router = express.Router();
  *   name: Books
  *   description: Endpoints de Libros
  */
+
+/**
+ * @swagger
+ * /api/books/search:
+ *   get:
+ *     summary: Buscar libros con filtros y paginación
+ *     tags: [Books]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Número de la página a obtener (por defecto 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Número máximo de libros por página (por defecto 10)
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Búsqueda parcial por título (ej. "Harry Potter")
+ *       - in: query
+ *         name: categories
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: integer
+ *         required: false
+ *         description: IDs de las categorías a filtrar (ej. [1, 2, 3])
+ *     responses:
+ *       200:
+ *         description: Resultados de la búsqueda de libros
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalItems:
+ *                   type: integer
+ *                   description: Número total de libros que coinciden con los filtros
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Número total de páginas disponibles
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       title:
+ *                         type: string
+ *                       authorId:
+ *                         type: integer
+ *                       genreId:
+ *                         type: integer
+ *                       photo:
+ *                         type: string
+ *                       price:
+ *                         type: number
+ *                         format: float
+ *                       year:
+ *                         type: integer
+ *       400:
+ *         description: Solicitud inválida (parámetros incorrectos)
+ *       500:
+ *         description: Error interno del servidor
+ */
+router.get('/search', search);
 
 /**
  * @swagger

@@ -39,8 +39,24 @@ const getByAuthorId = async(req, res) => {
     }
 };
 
+const search = async(req, res) => {
+    try {
+        const { categories, title, page = 1, limit = 10 } = req.query;
+       
+        if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1)
+            return errorResponse(res, 'Los parámetros de paginación deben ser números positivos.', 400);
+        
+        const { items, totalPages, totalItems } = await bookService.search({ page, limit, title, categories });
+        return successResponse(res, 'Libros obtenidos con éxito.', { items, totalPages, totalItems }, 200);
+    } catch (e) {
+        console.error(e);
+        handleError(e, res);
+    }
+};
+
 export {
     getById,
     getBooks,
-    getByAuthorId
+    getByAuthorId,
+    search
 };
