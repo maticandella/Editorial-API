@@ -7,7 +7,12 @@ import { Op } from 'sequelize';
 
 const repository = new BookRepository(BookModel);
 
-const include = [];
+const include = [{
+    model: AuthorModel,
+    as: 'author',
+    attributes: ['id', 'name', 'lastName'],
+}
+];
 
 const getById = async(id) => {
     const include = [{
@@ -75,7 +80,7 @@ const search = async ({ page = 1, limit = 10, title = '', categories = []  }) =>
     }
 
     const order = [['createdAt', 'DESC']]
-    const { totalItems, items } = await repository.search({filters, limit, offset, order });
+    const { totalItems, items } = await repository.search({filters, limit, offset, order, include });
     const totalPages = Math.ceil(totalItems / limit);
     return { items, totalPages, totalItems };
 }
