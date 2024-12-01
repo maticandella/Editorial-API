@@ -85,4 +85,15 @@ const search = async ({ page = 1, limit = 10, title = '', categories = []  }) =>
     return { items, totalPages, totalItems };
 }
 
-export { getById, getAll, getByAuthorId, search };
+const createBook = async(data) => {
+    //validateAuthor({ author: data }, null, OperationEnum.POST);
+    return await repository.create(data);
+};
+
+const updateBook = async(id, data) => {
+    const entityInDb = await repository.getById(id);
+    // validateAuthor({ author: data }, entityInDb, OperationEnum.PUT);
+    return await repository.update(entityInDb, data);
+};
+
+export { getById, getAll, getByAuthorId, search, createBook, updateBook };

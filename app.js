@@ -6,6 +6,7 @@ import { swaggerSpecs, swaggerUi } from './config/swaggerConfig.js';
 import authRoutes from './routes/admin/authRoutes.js';
 import authorRoutes from './routes/authorRoutes.js';
 import authorAdminRoutes from './routes/admin/authorAdminRoutes.js';
+import bookAdminRoutes from './routes/admin/bookAdminRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
 import genreRoutes from './routes/genreRoutes.js';
 import userRoutes from './routes/admin/userRoutes.js';
@@ -46,6 +47,7 @@ app.use(jsonWebTokenVerify)
 // Rutas con autenticación (Sitio administrativo)
 const adminSite = "admin";
 app.use(`/${adminSite}/authors`, authorAdminRoutes)
+app.use(`/${adminSite}/books`, bookAdminRoutes)
 app.use(`/${adminSite}/users`, userRoutes)
 
 // Sincronización con la base de datos

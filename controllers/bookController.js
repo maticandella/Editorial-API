@@ -54,9 +54,31 @@ const search = async(req, res) => {
     }
 };
 
+const create = async(req, res) => {
+    try {
+        const newBook = await bookService.createBook(req.body);
+        return successResponse(res, 'Libro registrado con éxito.', { id: newBook.id }, 201);
+    } catch (e) {
+        console.error(e)
+        handleError(e, res)
+    }
+};
+
+const update = async(req, res) => {
+    try {
+        const response = await bookService.updateBook(req.params.id, req.body);
+        return successResponse(res, 'Libro modificado con éxito.', response, 204);
+    } catch (e) {
+        console.error(e)
+        handleError(e, res)
+    }
+};
+
 export {
     getById,
     getBooks,
     getByAuthorId,
-    search
+    search,
+    create,
+    update
 };
