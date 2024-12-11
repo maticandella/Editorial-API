@@ -23,11 +23,10 @@ const port = process.env.PORT || 3000
 const clientPort = process.env.CLIENT_PORT || 4200
 
 app.use(cors({
-    origin: '*',
-    // origin: `http://localhost:${clientPort}`,
-    credentials: true,
+    origin: [`http://localhost:${clientPort}`], // Origen del frontend
+    credentials: true, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    // allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.disable('x-powered-by')
