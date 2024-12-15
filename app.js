@@ -10,6 +10,7 @@ import bookAdminRoutes from './routes/admin/bookAdminRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
 import genreRoutes from './routes/genreRoutes.js';
 import nationalityRoutes from './routes/nationalityRoutes.js';
+import socialMediaTypeRoutes from './routes/socialMediaTypeRoutes.js';
 import userRoutes from './routes/admin/userRoutes.js';
 import { sequelize } from './config/database.js';
 import cookieParser from 'cookie-parser';
@@ -41,6 +42,7 @@ app.use(`/${api}/authors`, authorRoutes)
 app.use(`/${api}/books`, bookRoutes)
 app.use(`/${api}/genres`, genreRoutes)
 app.use(`/${api}/nationalities`, nationalityRoutes)
+app.use(`/${api}/socialMediaTypes`, socialMediaTypeRoutes)
 
 //Middleware para el token
 app.use(jsonWebTokenVerify)
