@@ -45,6 +45,10 @@ export default class GenericRepository {
         return await this.model.create(data);
     }
 
+    async bulkCreate(data) {
+        return await this.model.bulkCreate(data);
+    }
+
     async update(entity, data) {
         return await entity.update(data);
     }

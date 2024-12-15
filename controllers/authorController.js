@@ -62,7 +62,18 @@ const update = async(req, res) => {
     }
 };
 
+const addSocialMedia = async(req, res) => {
+    try {
+        await authorService.addSocialMedia(req.params.id, req.body);
+        return successResponse(res, 'Redes registradas con éxito.', 201);
+    } catch (e) {
+        console.error(e)
+        handleError(e, res)
+    }
+};
+
 export {
+    addSocialMedia,
     getById,
     getAuthors,
     search,

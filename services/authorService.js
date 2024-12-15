@@ -1,13 +1,15 @@
 import NationalityModel from '../models/nacionalities/NacionalityModel.js';
-import AuthorSocialMediaModel from '../models/authors/AuthorSocialMediaModel.js';
 import SocialMediaTypeModel from '../models/socialMediaTypes/SocialMediaTypeModel.js';
 import AuthorRepository from '../repositories/authors/authorRepository.js';
+import AuthorSocialMediaRepository from '../repositories/authors/authorSocialMediaRepository.js';
+import AuthorSocialMediaModel from '../models/authors/AuthorSocialMediaModel.js';
 import AuthorModel from '../models/authors/AuthorModel.js';
 import { validateAuthor } from '../validations/authors/authorValidation.js';
 import { OperationEnum } from '../shared/enums/OperationEnum.js';
 import { Op } from 'sequelize';
 
 const repository = new AuthorRepository(AuthorModel);
+const authorSocialMediaRepository = new AuthorSocialMediaRepository(AuthorSocialMediaModel);
 
 const include = [{
     model: NationalityModel,
@@ -110,6 +112,15 @@ const updateAuthor = async(id, data) => {
     return await repository.update(entityInDb, data);
 };
 
+const addSocialMedia = async(authorId, data) => {
+    const socialMediaData = data.map(d => ({
+        authorId,
+        ...d
+    }));
+
+    return await authorSocialMediaRepository.bulkCreate(socialMediaData);
+};
+
 const normalizeName = (name) => name.trim().toUpperCase();
 
-export { getById, getAll, search, createAuthor, updateAuthor };
+export { addSocialMedia, getById, getAll, search, createAuthor, updateAuthor };

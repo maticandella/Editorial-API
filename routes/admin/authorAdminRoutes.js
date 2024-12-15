@@ -1,5 +1,5 @@
 import express from 'express';
-import { create, update } from '../../controllers/authorController.js';
+import { addSocialMedia, create, update } from '../../controllers/authorController.js';
 
 const router = express.Router();
 
@@ -66,5 +66,71 @@ router.post('/', create);
  *         description: Autor no encontrado
  */
 router.put('/:id', update);
+
+/**
+ * @swagger
+ * /api/admin/authors/{authorId}/socialmedia:
+ *   post:
+ *     summary: Asignar redes sociales a un autor existente
+ *     tags: [Authors (Admin)]
+ *     parameters:
+ *       - name: authorId
+ *         in: path
+ *         required: true
+ *         description: ID del autor al que se le asignarán las redes sociales
+ *         schema:
+ *           type: integer
+ *           example: 123
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 socialMediaTypeId:
+ *                   type: integer
+ *                   description: ID del tipo de red social (ej. Twitter, Instagram)
+ *                   example: 1
+ *                 url:
+ *                   type: string
+ *                   format: uri
+ *                   description: URL del perfil en la red social
+ *                   example: https://twitter.com/usuario
+ *     responses:
+ *       200:
+ *         description: Redes sociales asignadas exitosamente al autor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Redes sociales asignadas correctamente
+ *       400:
+ *         description: Error en los datos enviados o en el proceso de asignación
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Datos inválidos. Verifique el 'socialMediaTypeId' o la 'url'."
+ *       404:
+ *         description: Autor no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "No se encontró el autor con el ID especificado."
+ */
+router.post('/:id/socialmedia', addSocialMedia);
 
 export default router;
