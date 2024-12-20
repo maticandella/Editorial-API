@@ -1,0 +1,4 @@
+export const ErrorIdentifiers = {
+    FOREIGN_KEY_CONSTRAINT: 'FOREIGN_KEY_CONSTRAINT',
+    UNEXPECTED_ERROR: 'UNEXPECTED_ERROR'
+};

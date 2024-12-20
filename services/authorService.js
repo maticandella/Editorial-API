@@ -7,6 +7,7 @@ import AuthorModel from '../models/authors/AuthorModel.js';
 import { validateAuthor } from '../validations/authors/authorValidation.js';
 import { OperationEnum } from '../shared/enums/OperationEnum.js';
 import { Op } from 'sequelize';
+import { ErrorIdentifiers } from '../shared/Identifiers/ErrorIdentifiers.js';
 
 const repository = new AuthorRepository(AuthorModel);
 const authorSocialMediaRepository = new AuthorSocialMediaRepository(AuthorSocialMediaModel);
@@ -112,6 +113,28 @@ const updateAuthor = async(id, data) => {
     return await repository.update(entityInDb, data);
 };
 
+const deleteAuthor = async(id) => {
+    const entityInDb = await repository.getById(id);
+    validateAuthor({ author: entityInDb }, entityInDb, OperationEnum.DELETE);
+
+    try {
+        return await repository.remove(entityInDb);
+    } catch (e) {
+        // Captura de error de FK
+        if (e.name === 'SequelizeForeignKeyConstraintError' || e.code === '23503')
+        {
+            const error = new Error()
+            error.message = `No se puede eliminar a ${entityInDb.name} ${entityInDb.lastName}. Posee Libros relacionados.`
+            error.code = ErrorIdentifiers.FOREIGN_KEY_CONSTRAINT;
+            throw error;
+        }
+        // Otros errores
+        const error = new Error(`No se puede eliminar a ${entityInDb.name} ${entityInDb.lastName}. Ocurrió un error inesperado.`)
+        error.code = ErrorIdentifiers.UNEXPECTED_ERROR;
+        throw error;
+    }
+};
+
 const addSocialMedia = async(authorId, data) => {
     const socialMediaData = data.map(d => ({
         authorId,
@@ -123,4 +146,4 @@ const addSocialMedia = async(authorId, data) => {
 
 const normalizeName = (name) => name.trim().toUpperCase();
 
-export { addSocialMedia, getById, getAll, search, createAuthor, updateAuthor };
+export { addSocialMedia, getById, getAll, search, createAuthor, deleteAuthor, updateAuthor };

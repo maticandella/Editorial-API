@@ -62,6 +62,15 @@ const update = async(req, res) => {
     }
 };
 
+const deleteAuthor = async(req, res) => {
+    try {
+        const response = await authorService.deleteAuthor(req.params.id);
+        return successResponse(res, 'Autor eliminado con éxito.', response, 204);
+    } catch (e) {
+        handleError(e, res)
+    }
+};
+
 const addSocialMedia = async(req, res) => {
     try {
         await authorService.addSocialMedia(req.params.id, req.body);
@@ -78,5 +87,6 @@ export {
     getAuthors,
     search,
     create,
-    update
+    update,
+    deleteAuthor
 };

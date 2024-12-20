@@ -26,7 +26,9 @@ export const authorSchema = Joi.object({
 export const validateAuthor = ({ author }, entityInDb, operation) => {
     if (operation !== OperationEnum.POST && entityInDb == null && entityInDb == undefined) throw new ValidationError('El autor no fue encontrado.');
 
-    const { error } = authorSchema.validate(author, { abortEarly: false });
+    if (operation !== OperationEnum.DELETE) {
+        const { error } = authorSchema.validate(author, { abortEarly: false });
 
-    if (error) throw new ValidationError(error.details.map(detail => detail.message).join(', '));
+        if (error) throw new ValidationError(error.details.map(detail => detail.message).join(', '));
+    }
 };

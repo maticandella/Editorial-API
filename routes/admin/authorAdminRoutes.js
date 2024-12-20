@@ -1,5 +1,5 @@
 import express from 'express';
-import { addSocialMedia, create, update } from '../../controllers/authorController.js';
+import { addSocialMedia, create, deleteAuthor, update } from '../../controllers/authorController.js';
 
 const router = express.Router();
 
@@ -132,5 +132,45 @@ router.put('/:id', update);
  *                   example: "No se encontró el autor con el ID especificado."
  */
 router.post('/:id/socialmedia', addSocialMedia);
+
+/**
+ * @swagger
+ * /api/admin/authors/{id}:
+ *   delete:
+ *     summary: Eliminar un autor existente
+ *     tags: [Authors (Admin)]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del autor a eliminar
+ *         schema:
+ *           type: integer
+ *           example: 123
+ *     responses:
+ *       204:
+ *         description: Autor eliminado con éxito (sin contenido en la respuesta)
+ *       404:
+ *         description: Autor no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "No se encontró el autor con el ID especificado."
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Ocurrió un error al intentar eliminar el autor."
+ */
+router.delete('/:id', deleteAuthor);
 
 export default router;
