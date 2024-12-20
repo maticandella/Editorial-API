@@ -124,12 +124,12 @@ const deleteAuthor = async(id) => {
         if (e.name === 'SequelizeForeignKeyConstraintError' || e.code === '23503')
         {
             const error = new Error()
-            error.message = `No se puede eliminar a ${entityInDb.name} ${entityInDb.lastName}. Posee Libros relacionados.`
+            error.message = `No se pudo eliminar a ${entityInDb.name} ${entityInDb.lastName}. Posee Libros relacionados.`
             error.code = ErrorIdentifiers.FOREIGN_KEY_CONSTRAINT;
             throw error;
         }
         // Otros errores
-        const error = new Error(`No se puede eliminar a ${entityInDb.name} ${entityInDb.lastName}. Ocurrió un error inesperado.`)
+        const error = new Error(`No se pudo eliminar a ${entityInDb.name} ${entityInDb.lastName}. Ocurrió un error inesperado.`)
         error.code = ErrorIdentifiers.UNEXPECTED_ERROR;
         throw error;
     }
