@@ -14,11 +14,13 @@ export const authorSchema = Joi.object({
         'number.base': 'La nacionalidad debe ser un número.',
         'number.integer': 'La nacionalidad debe ser un número entero.'
     }),
-    photo: Joi.string().optional(), //pattern(/\.(jpg|jpeg|png)$/i).messages({
+    photo: Joi.string().allow(null, '').optional(), //pattern(/\.(jpg|jpeg|png)$/i).messages({
     // 'string.pattern.base': 'La foto debe tener una extensión válida (.jpg, .jpeg, .png).',
     // }),
     isActive: Joi.boolean().optional(),
-    note: Joi.string().optional()
+    note: Joi.string().allow(null, '').optional().messages({
+        'string.base': 'La nota debe ser una cadena de texto.'
+    })
 });
 
 export const validateAuthor = ({ author }, entityInDb, operation) => {
