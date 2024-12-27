@@ -8,6 +8,7 @@ import authorRoutes from './routes/authorRoutes.js';
 import authorAdminRoutes from './routes/admin/authorAdminRoutes.js';
 import bookAdminRoutes from './routes/admin/bookAdminRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
+import editionRoutes from './routes/editionRoutes.js';
 import genreRoutes from './routes/genreRoutes.js';
 import nationalityRoutes from './routes/nationalityRoutes.js';
 import socialMediaTypeRoutes from './routes/socialMediaTypeRoutes.js';
@@ -40,6 +41,7 @@ const api = 'api'
 app.use(`/${api}/`, authRoutes)
 app.use(`/${api}/authors`, authorRoutes)
 app.use(`/${api}/books`, bookRoutes)
+app.use(`/${api}/editions`, editionRoutes)
 app.use(`/${api}/genres`, genreRoutes)
 app.use(`/${api}/nationalities`, nationalityRoutes)
 app.use(`/${api}/socialMediaTypes`, socialMediaTypeRoutes)

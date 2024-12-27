@@ -3,7 +3,10 @@ import BookModel from '../models/books/BookModel.js';
 import GenreModel from '../models/genres/GenreModel.js';
 import EditionModel from '../models/editions/EditionModel.js';
 import AuthorModel from '../models/authors/AuthorModel.js';
+import { validateBook } from '../validations/books/bookValidation.js';
+import { OperationEnum } from '../shared/enums/OperationEnum.js';
 import { Op } from 'sequelize';
+import { ErrorIdentifiers } from '../shared/Identifiers/ErrorIdentifiers.js';
 
 const repository = new BookRepository(BookModel);
 
@@ -86,13 +89,13 @@ const search = async ({ page = 1, limit = 10, title = '', categories = []  }) =>
 }
 
 const createBook = async(data) => {
-    //validateAuthor({ author: data }, null, OperationEnum.POST);
+    validateBook({ book: data }, null, OperationEnum.POST);
     return await repository.create(data);
 };
 
 const updateBook = async(id, data) => {
     const entityInDb = await repository.getById(id);
-    // validateAuthor({ author: data }, entityInDb, OperationEnum.PUT);
+    validateBook({ book: data }, entityInDb, OperationEnum.PUT);
     return await repository.update(entityInDb, data);
 };
 
