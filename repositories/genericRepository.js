@@ -56,4 +56,12 @@ export default class GenericRepository {
     async remove(entity) {
         return await entity.destroy();
     }
+
+    async removeList(entityList, options = {}) {
+        const ids = entityList.map(entity => entity.id);
+        return await this.model.destroy({
+            where: { id: ids },
+            ...options
+        });
+    }
 }

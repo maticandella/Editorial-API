@@ -1,3 +1,4 @@
+import { sequelize } from '../config/database.js';
 import NationalityModel from '../models/nacionalities/NacionalityModel.js';
 import SocialMediaTypeModel from '../models/socialMediaTypes/SocialMediaTypeModel.js';
 import AuthorRepository from '../repositories/authors/authorRepository.js';
@@ -8,6 +9,7 @@ import { validateAuthor } from '../validations/authors/authorValidation.js';
 import { OperationEnum } from '../shared/enums/OperationEnum.js';
 import { Op } from 'sequelize';
 import { ErrorIdentifiers } from '../shared/Identifiers/ErrorIdentifiers.js';
+
 
 const repository = new AuthorRepository(AuthorModel);
 const authorSocialMediaRepository = new AuthorSocialMediaRepository(AuthorSocialMediaModel);
@@ -136,12 +138,23 @@ const deleteAuthor = async(id) => {
 };
 
 const addSocialMedia = async(authorId, data) => {
-    const socialMediaData = data.map(d => ({
-        authorId,
-        ...d
-    }));
+    const transaction = await sequelize.transaction();
 
-    return await authorSocialMediaRepository.bulkCreate(socialMediaData);
+    try {
+        //Busco las redes ya registradas para el autor y las elimino (todo dentro de la misma transacción)
+        const authorSocialMediaInDb = await authorSocialMediaRepository.getByAuthorId(authorId, { transaction });
+        await authorSocialMediaRepository.removeList(authorSocialMediaInDb, { transaction });
+
+        const socialMediaData = data.map(d => ({ authorId, ...d }));
+
+        //Creo los registros con las nuevas redes para el autor (todo dentro de la misma transacción)
+        await authorSocialMediaRepository.bulkCreate(socialMediaData, { transaction });
+
+        await transaction.commit();
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
 };
 
 const normalizeName = (name) => name.trim().toUpperCase();
