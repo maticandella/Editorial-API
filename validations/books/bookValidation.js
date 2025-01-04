@@ -55,12 +55,16 @@ export const bookSchema = Joi.object({
     }),
 });
 
-export const validateBook = ({ book }, entityInDb, operation) => {
+export const validateBook = ({ book }, entityInDb, existsISBN, operation) => {
     if (operation !== OperationEnum.POST && entityInDb == null && entityInDb == undefined) throw new ValidationError('El libro no fue encontrado.');
 
     if (operation !== OperationEnum.DELETE) {
         const { error } = bookSchema.validate(book, { abortEarly: false }); //abortEarly en false significa que No se detiene al encontrar el primer error. Sigue validando todas las demás reglas definidas en el esquema.
 
         if (error) throw new ValidationError(error.details.map(detail => detail.message).join(', '));
+
+        if (existsISBN) {
+            throw new ValidationError(`El ISBN ya se encuentra registrado.`);
+        }
     }
 };

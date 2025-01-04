@@ -89,13 +89,20 @@ const search = async ({ page = 1, limit = 10, title = '', categories = []  }) =>
 }
 
 const createBook = async(data) => {
-    validateBook({ book: data }, null, OperationEnum.POST);
+    const existsISBN =  await repository.getByISBN(data.isbn) > 0;
+    validateBook({ book: data }, null, existsISBN, OperationEnum.POST);
     return await repository.create(data);
 };
 
 const updateBook = async(id, data) => {
     const entityInDb = await repository.getById(id);
-    validateBook({ book: data }, entityInDb, OperationEnum.PUT);
+    var existsISBN = false;
+
+    if (data.isbn && data.isbn !== entityInDb.isbn) {
+        existsISBN = await repository.getByISBN(data.isbn) > 0;
+    }
+
+    validateBook({ book: data }, entityInDb, existsISBN, OperationEnum.PUT);
     return await repository.update(entityInDb, data);
 };
 

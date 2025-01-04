@@ -6,10 +6,15 @@ export default class BookRepository extends GenericRepository {
     }
 
     async getByAuthorId(authorId, options = {}) {
-        console.error(authorId);
         return await this.model.findAll({
             where: { authorId: authorId },
             ...options,
+        });
+    }
+
+    async getByISBN(isbn) {
+        return await this.model.count({
+            where: { isbn: isbn }
         });
     }
 }
