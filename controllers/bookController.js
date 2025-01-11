@@ -74,11 +74,21 @@ const update = async(req, res) => {
     }
 };
 
+const deleteBook = async(req, res) => {
+    try {
+        const response = await bookService.deleteBook(req.params.id);
+        return successResponse(res, 'Libro eliminado con éxito.', response, 204);
+    } catch (e) {
+        handleError(e, res)
+    }
+};
+
 export {
     getById,
     getBooks,
     getByAuthorId,
     search,
     create,
-    update
+    update,
+    deleteBook
 };

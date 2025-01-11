@@ -106,4 +106,17 @@ const updateBook = async(id, data) => {
     return await repository.update(entityInDb, data);
 };
 
-export { getById, getAll, getByAuthorId, search, createBook, updateBook };
+const deleteBook = async(id) => {
+    const entityInDb = await repository.getById(id);
+    validateBook({ book: entityInDb }, entityInDb, false, OperationEnum.DELETE);
+
+    try {
+        return await repository.remove(entityInDb);
+    } catch (e) {
+        const error = new Error(`No se pudo eliminar ${entityInDb.title}. Ocurrió un error inesperado.`)
+        error.code = ErrorIdentifiers.UNEXPECTED_ERROR;
+        throw error;
+    }
+};
+
+export { getById, getAll, getByAuthorId, search, createBook, updateBook, deleteBook };
