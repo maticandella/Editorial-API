@@ -41,6 +41,7 @@ const getAll = async({ page = 1, limit = 10, order }) => {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     const offset = (page - 1) * limit;
+    order = order || [['createdAt', 'DESC']];
 
     const { totalItems, items } = await repository.getAllPaginated({ limit, offset, order, include });
     const totalPages = Math.ceil(totalItems / limit);

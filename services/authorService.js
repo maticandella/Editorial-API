@@ -57,7 +57,7 @@ const getAll = async({ page = 1, limit = 10 }) => {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     const offset = (page - 1) * limit;
-    const order = [['lastName', 'ASC']]
+    const order = [['createdAt', 'DESC']];
 
     const { totalItems, items } = await repository.getAllPaginated({ limit, offset, order, include });
     const totalPages = Math.ceil(totalItems / limit);
@@ -94,7 +94,7 @@ const search = async ({ page = 1, limit = 10, name, initial }) => {
         }
     }
 
-    const order = [['lastName', 'ASC']]
+    const order = [['createdAt', 'DESC']]
     const { totalItems, items } = await repository.search({filters, limit, offset, order });
     const totalPages = Math.ceil(totalItems / limit);
     return { items, totalPages, totalItems };
