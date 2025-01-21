@@ -21,7 +21,7 @@ const getById = async(id) => {
     const include = [{
             model: AuthorModel,
             as: 'author',
-            attributes: ['id','name','lastName'],
+            attributes: ['id','name','lastName','photo'],
         },
         {
             model: GenreModel,
