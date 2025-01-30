@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { ValidationError } from "../baseErrors.js";
+import { OperationEnum } from '../../shared/enums/OperationEnum.js';
 
 export const authorSchema = Joi.object({
     name: Joi.string().required().messages({
@@ -13,15 +14,21 @@ export const authorSchema = Joi.object({
         'number.base': 'La nacionalidad debe ser un número.',
         'number.integer': 'La nacionalidad debe ser un número entero.'
     }),
-    photo: Joi.string().optional(), //pattern(/\.(jpg|jpeg|png)$/i).messages({
+    photo: Joi.string().allow(null, '').optional(), //pattern(/\.(jpg|jpeg|png)$/i).messages({
     // 'string.pattern.base': 'La foto debe tener una extensión válida (.jpg, .jpeg, .png).',
     // }),
     isActive: Joi.boolean().optional(),
-    note: Joi.string().optional()
+    note: Joi.string().allow(null, '').optional().messages({
+        'string.base': 'La nota debe ser una cadena de texto.'
+    })
 });
 
-export const validateAuthor = ({ author }) => {
-    const { error } = authorSchema.validate(author, { abortEarly: false });
+export const validateAuthor = ({ author }, entityInDb, operation) => {
+    if (operation !== OperationEnum.POST && entityInDb == null && entityInDb == undefined) throw new ValidationError('El autor no fue encontrado.');
 
-    if (error) throw new ValidationError(error.details.map(detail => detail.message).join(', '));
+    if (operation !== OperationEnum.DELETE) {
+        const { error } = authorSchema.validate(author, { abortEarly: false });
+
+        if (error) throw new ValidationError(error.details.map(detail => detail.message).join(', '));
+    }
 };

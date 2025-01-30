@@ -15,13 +15,27 @@ const getById = async(req, res) => {
 
 const getAuthors = async(req, res) => {
     try {
-        const { page, limit, order } = req.query;
+        const { page, limit } = req.query;
         if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1)
             return errorResponse(res, 'Los parámetros de paginación deben ser números positivos.', 400);
 
-        const { authors, totalPages, totalAuthors } = await authorService.getAll({ page, limit, order });
+        const { items, totalPages, totalItems } = await authorService.getAll({ page, limit });
 
-        return successResponse(res, 'Autores obtenidos con éxito.', { authors, totalPages, totalAuthors }, 200);
+        return successResponse(res, 'Autores obtenidos con éxito.', { items, totalPages, totalItems }, 200);
+    } catch (e) {
+        console.error(e);
+        handleError(e, res);
+    }
+};
+
+const search = async(req, res) => {
+    try {
+        const { initial, name, page = 1, limit = 10 } = req.query;
+        if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1)
+            return errorResponse(res, 'Los parámetros de paginación deben ser números positivos.', 400);
+        
+        const { items, totalPages, totalItems } = await authorService.search({ page, limit, name, initial });
+        return successResponse(res, 'Autores obtenidos con éxito.', { items, totalPages, totalItems }, 200);
     } catch (e) {
         console.error(e);
         handleError(e, res);
@@ -38,8 +52,41 @@ const create = async(req, res) => {
     }
 };
 
+const update = async(req, res) => {
+    try {
+        const response = await authorService.updateAuthor(req.params.id, req.body);
+        return successResponse(res, 'Autor modificado con éxito.', response, 204);
+    } catch (e) {
+        console.error(e)
+        handleError(e, res)
+    }
+};
+
+const deleteAuthor = async(req, res) => {
+    try {
+        const response = await authorService.deleteAuthor(req.params.id);
+        return successResponse(res, 'Autor eliminado con éxito.', response, 204);
+    } catch (e) {
+        handleError(e, res)
+    }
+};
+
+const addSocialMedia = async(req, res) => {
+    try {
+        await authorService.addSocialMedia(req.params.id, req.body);
+        return successResponse(res, 'Redes registradas con éxito.', 201);
+    } catch (e) {
+        console.error(e)
+        handleError(e, res)
+    }
+};
+
 export {
+    addSocialMedia,
     getById,
     getAuthors,
-    create
+    search,
+    create,
+    update,
+    deleteAuthor
 };

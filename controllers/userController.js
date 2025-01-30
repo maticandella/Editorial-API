@@ -46,8 +46,28 @@ const register = async(req, res) => {
     }
 };
 
+const validateSession = async(req, res) => {
+    const token = req.cookies.access_token;
+    if (!token) {
+        return res.status(401).json(false); 
+    }
+
+    try {
+        //Con el decoded podría verificar el rol del usuario, implementar a futuro
+        // const decoded = jwt.verify(token, process.env.SECRET_JWT_KEY);
+        // if (decoded.role !== 'admin') {
+        //     return res.status(403).json({ message: 'Access forbidden' });
+        // }
+        // req.session = { user: decoded };
+        return res.status(200).json(true)// Sesión válida
+    } catch (e) {
+        return res.status(401).json(false); // Token inválido o expirado
+    }
+}
+
 export {
     login,
     logout,
-    register
+    register,
+    validateSession
 };
