@@ -45,6 +45,46 @@ const createUser = async(data) => {
     return await repository.create(data);
 };
 
+const requestResetPassword = async(email) => {
+    email = normalizeEmail(email);
+    const user = await repository.getByEmail(email);
+
+    //FALTA VALIDAR SI EXISTE EL USER
+
+    const token = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.SECRET_JWT_KEY,
+        { expiresIn: '10m' }
+    );
+
+    console.log(`Enviar este token por email: ${token}`);
+
+    return { message: "Se ha enviado un correo con las instrucciones para restablecer la contraseña." };
+}
+
+const resetPassword = async (token, newPassword) => {
+    var decoded;
+    try {
+        decoded = jwt.verify(token, process.env.SECRET_JWT_KEY);
+    } catch (error) {
+        //VER COMO VALIDAR O COMO DEVOLVER EL ERROR
+        throw new Error("Token inválido o expirado.");
+    }
+
+    const user = await repository.getByEmail(decoded.email);
+    if (!user) {
+        //VER COMO VALIDAR O COMO DEVOLVER EL ERROR
+        throw new Error("Usuario no encontrado.");
+    }
+
+    const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    //await repository.updatePassword(user.id, hashedPassword);
+
+    return { message: "Contraseña restablecida con éxito." };
+};
+
 const normalizeEmail = (email) => email.trim().toLowerCase();
 
-export { login, createUser };
+export { login, createUser, requestResetPassword, resetPassword };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, register } from '../../controllers/userController.js';
+import { login, register, requestResetPassword, resetPassword } from '../../controllers/userController.js';
 
 const router = express.Router();
 
@@ -34,6 +34,56 @@ const router = express.Router();
  *         description: Credenciales incorrectas
  */
 router.post('/login', login);
+
+/**
+ * @swagger
+ * /api/auth/requestResetPassword:
+ *   post:
+ *     summary: Solicitar reset de contraseña
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Se envia un correo con las instrucciones para restablecer la contraseña
+ *       400:
+ *          description: Error
+ */
+router.post('/requestResetPassword', requestResetPassword);
+
+/**
+ * @swagger
+ * /api/auth/resetPassword:
+ *   post:
+ *     summary: Realizar reset de contraseña con el token obtenido en requestResetPassword
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Contraseña restablecida con éxito
+ *       400:
+ *          description: Error
+ */
+router.post('/resetPassword', resetPassword);
 
 /**
  * @swagger

@@ -8,4 +8,11 @@ export default class UserRepository extends GenericRepository {
     async getByEmail(email) {
         return await this.model.findOne({ where: { email } });
     }
+
+    async updatePassword(userId, newPassword) {
+        return await this.model.update(
+            { password: newPassword },
+            { where: { id: userId } }
+        );
+    }
 }

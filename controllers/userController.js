@@ -36,6 +36,25 @@ const logout = async(req, res) => {
     return successResponse(res, 'Logout exitoso', null, 200);
 };
 
+const requestResetPassword = async (req, res) => {
+    try {
+        const response = await userService.requestResetPassword(req.body.email);
+        return successResponse(res, response, 200);
+    } catch (e) {
+        handleError(e, res);
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+        const response = await userService.resetPassword(token, newPassword);
+        return successResponse(res, response, 200);
+    } catch (e) {
+        handleError(e, res);
+    }
+};
+
 const register = async(req, res) => {
     try {
         const newUser = await userService.createUser(req.body);
@@ -68,6 +87,8 @@ const validateSession = async(req, res) => {
 export {
     login,
     logout,
+    requestResetPassword,
+    resetPassword,
     register,
     validateSession
 };
