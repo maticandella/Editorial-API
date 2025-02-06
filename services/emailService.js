@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 
 /**
  * Email de recuperación de contraseña.
+ * Lo hago con https://mailtrap.io/
  * @param {string} toEmail - Email del destinatario.
  * @param {string} resetToken - Token de restablecimiento.
  */
