@@ -9,9 +9,9 @@ export default class UserRepository extends GenericRepository {
         return await this.model.findOne({ where: { email } });
     }
 
-    async updatePassword(userId, newPassword) {
+    async updatePassword(userId, hashedPassword) {
         return await this.model.update(
-            { password: newPassword },
+            { password: hashedPassword },
             { where: { id: userId } }
         );
     }

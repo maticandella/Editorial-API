@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { validateUser } from '../validations/users/userValidation.js';
 import jwt from 'jsonwebtoken';
 import { validateUserLogin } from '../validations/users/userLoginValidation.js';
+import { sendPasswordResetEmail } from '../services/emailService.js';
 dotenv.config();
 
 const repository = new UserRepository(UserModel);
@@ -49,17 +50,20 @@ const requestResetPassword = async(email) => {
     email = normalizeEmail(email);
     const user = await repository.getByEmail(email);
 
-    //FALTA VALIDAR SI EXISTE EL USER
-
-    const token = jwt.sign(
-        { id: user.id, email: user.email },
-        process.env.SECRET_JWT_KEY,
-        { expiresIn: '10m' }
-    );
-
-    console.log(`Enviar este token por email: ${token}`);
-
-    return { message: "Se ha enviado un correo con las instrucciones para restablecer la contraseña." };
+    if(user != null) {
+        const token = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.SECRET_JWT_KEY,
+            { expiresIn: '10m' }
+        );
+    
+        await sendPasswordResetEmail(user.email, token);
+    
+        return { message: "Se ha enviado un correo con las instrucciones para restablecer la contraseña." };
+    }
+    else{
+        return { message: "El email indicado no pertenece a ningún usuario." };
+    }
 }
 
 const resetPassword = async (token, newPassword) => {
@@ -80,7 +84,7 @@ const resetPassword = async (token, newPassword) => {
     const saltRounds = parseInt(process.env.SALT_ROUNDS, 10);
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
-    //await repository.updatePassword(user.id, hashedPassword);
+    await repository.updatePassword(user.id, hashedPassword);
 
     return { message: "Contraseña restablecida con éxito." };
 };
