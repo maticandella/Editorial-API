@@ -66,8 +66,8 @@ const initApp = async() => {
 
         // Iniciar el servidor
         app.listen(port, () => {
-            console.log(`Servidor corriendo en http://localhost:${port}`);
-            console.log(`Documentación de la API en http://localhost:${port}/api-docs`);
+            console.log(`Servidor corriendo en ${process.env.URL_BACK}`);
+            console.log(`Documentación de la API en ${process.env.URL_BACK}/api-docs`);
         })
     } catch (error) {
         console.error(`Error initializing app:${error.message}`)
