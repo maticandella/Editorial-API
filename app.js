@@ -75,3 +75,5 @@ const initApp = async() => {
 }
 
 initApp()
+
+export default app;
