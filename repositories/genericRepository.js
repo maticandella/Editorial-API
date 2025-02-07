@@ -7,27 +7,61 @@ export default class GenericRepository {
         return await this.model.findAll();
     }
 
-    async getById(id) {
-        return await this.model.findByPk(id);
+    async getById(id, options = {}) {
+        return await this.model.findOne({
+            where: { id },
+            ...options,
+        });
+    }
+
+    async getAllPaginated({ limit, offset, order, include = [] }) {
+        const [items, totalItems] = await Promise.all([
+            this.model.findAll({
+                limit,
+                offset,
+                order: order || [['id', 'ASC']],
+                include,
+            }),
+            this.model.count(),
+        ]);
+        return { totalItems, items };
+    }
+
+    async search({ filters = {}, limit = 10, offset = 0, include = [], order = [['name', 'ASC']] }) {
+        const [items, totalItems] = await Promise.all([
+            this.model.findAll({
+                where: filters,
+                limit,
+                offset,
+                order,
+                include,
+            }),
+            this.model.count({ where: filters }),
+        ]);
+        return { totalItems, items };
     }
 
     async create(data) {
         return await this.model.create(data);
     }
 
-    async update(id, data) {
-        const entity = await this.model.findByPk(id);
-        if (!entity) {
-            throw new Error('Not found');
-        }
+    async bulkCreate(data) {
+        return await this.model.bulkCreate(data);
+    }
+
+    async update(entity, data) {
         return await entity.update(data);
     }
 
-    async remove(id) {
-        const entity = await this.model.findByPk(id);
-        if (!entity) {
-            throw new Error('Not found');
-        }
+    async remove(entity) {
         return await entity.destroy();
+    }
+
+    async removeList(entityList, options = {}) {
+        const ids = entityList.map(entity => entity.id);
+        return await this.model.destroy({
+            where: { id: ids },
+            ...options
+        });
     }
 }

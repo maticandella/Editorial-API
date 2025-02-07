@@ -18,6 +18,10 @@ const NationalityModel = sequelize.define('Nationality', {
         allowNull: false,
         defaultValue: true,
     },
+    flag: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 }, {
     tableName: 'Nationalities',
     timestamps: false,
