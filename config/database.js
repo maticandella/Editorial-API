@@ -16,6 +16,7 @@ const sequelize = new Sequelize(process.env.DB_CONNECTION_STRING, {
     dialect: 'postgres',
     protocol: 'postgres',
     logging: false,
+    dialectModule: pg,
     dialectOptions: {
       ssl: {
         require: true, //Neon requiere SSL
