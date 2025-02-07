@@ -3,8 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "node --watch app.js",
-        "build": "echo 'No build step needed'",
-        "postinstall": "npm install pg"
+        "build": "echo 'No build step needed'"
     },
     "dependencies": {
         "bcrypt": "5.1.1",
