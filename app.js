@@ -34,11 +34,7 @@ app.use(cors({
 app.disable('x-powered-by')
 app.use(bodyParser.json())
 app.use(cookieParser())
-app.use("/swagger", express.static("node_modules/swagger-ui-dist"));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-app.get("/api/docs", (req, res) => {
-    res.redirect("/api/docs/");
-  });
 
 // Rutas sin autenticación (Sitio público)
 const api = 'api'
