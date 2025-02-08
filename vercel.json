@@ -1,14 +1,22 @@
 {
-    "builds": [
-      {
-        "src": "app.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/app.js"
-      }
-    ]
-  }
+  "builds": [
+    {
+      "src": "app.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/swagger/(.*)",
+      "dest": "/swagger/$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/app.js"
+    },
+    {
+      "src": "/api-docs",
+      "dest": "/app.js"
+    }
+  ]
+}

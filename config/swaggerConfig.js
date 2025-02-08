@@ -14,7 +14,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `${process.env.URL_BACK}${process.env.PORT}/api`,
+        url: `${process.env.URL_BACK}/api`,
       },
     ],
   },
