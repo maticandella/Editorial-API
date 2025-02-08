@@ -35,9 +35,9 @@ app.disable('x-powered-by')
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use("/swagger", express.static("node_modules/swagger-ui-dist"));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-app.get("/api-docs", (req, res) => {
-    res.redirect("/api-docs/");
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+app.get("/api/docs", (req, res) => {
+    res.redirect("/api/docs/");
   });
 
 // Rutas sin autenticación (Sitio público)
@@ -71,7 +71,7 @@ const initApp = async() => {
         // Iniciar el servidor
         app.listen(port, () => {
             console.log(`Servidor corriendo en ${process.env.URL_BACK}`);
-            console.log(`Documentación de la API en ${process.env.URL_BACK}/api-docs`);
+            console.log(`Documentación de la API en ${process.env.URL_BACK}/api/docs`);
         })
     } catch (error) {
         console.error(`Error initializing app:${error.message}`)

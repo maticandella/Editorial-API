@@ -14,7 +14,7 @@ Este proyecto es parte de mi aprendizaje en Node.js y lógica de backend.
 
 ## Documentación :computer:
 
-* Swagger - (http://localhost:3000/api-docs)
+* Swagger - (https://editorial-api.vercel.app/api/docs)
 
 ## Autor ✒️
 
