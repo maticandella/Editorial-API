@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/genres:
+ * /api/editions:
  *   get:
  *     summary: Obtener una lista de tipos de edición
  *     tags: [Editions]
