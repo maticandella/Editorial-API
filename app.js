@@ -25,7 +25,7 @@ const port = process.env.PORT || 3000
 const clientPort = process.env.CLIENT_PORT || 4200
 
 app.use(cors({
-    origin: [`http://localhost:${clientPort}`], // Origen del frontend
+    origin: [process.env.URL_BACK], // Origen del frontend
     credentials: true, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
