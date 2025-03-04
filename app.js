@@ -23,13 +23,26 @@ defineAssociations();
 const app = express()
 const port = process.env.PORT || 3000
 const clientPort = process.env.CLIENT_PORT || 4200
+const urlDev = `http://localhost:${clientPort}`
+const urlPrd = process.env.URL_PRD || `http://localhost:${clientPort}}`
 
-app.use(cors({
-    origin: [process.env.URL_BACK], // Origen del frontend
-    credentials: true, 
+const allowedOrigins = [
+    urlDev, // Entorno de desarrollo
+    urlPrd // Entorno de producción
+  ];
+  
+  app.use(cors({
+    origin: function(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS not allowed'), false); 
+      }
+    },
+    credentials: true, // Permite el uso de credenciales (cookies, cabeceras de autenticación, etc.)
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  }));
 
 app.disable('x-powered-by')
 app.use(bodyParser.json())
@@ -60,7 +73,7 @@ const initApp = async() => {
     try {
         await sequelize.authenticate()
         console.log('Connection to the database has been established successfully.')
-
+        console.log("urlback", process.env.URL_BACK)
         await sequelize.sync({ force: false }) // force: true si quiero forzar recrear las tablas
         console.log('Database synchronized.')
 
